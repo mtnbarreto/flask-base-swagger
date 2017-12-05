@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers:
-  - url: 'http://192.168.99.101/v1'
+  - url: 'http://192.168.99.100/v1'
     description: Development server
 info:
   description: |
@@ -156,7 +156,6 @@ paths:
       responses:
         '200':
           description: Successfully sent validation code.
-      security: []
   /auth/cellphone/verify:
     put:
       description: >-
@@ -171,7 +170,6 @@ paths:
       responses:
         '200':
           description: Successful cellphone validation.
-      security: []
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
@@ -240,7 +238,9 @@ components:
         - cellphone_number
         - cellphone_cc
       properties:
-        fb_access_token:
+        cellphone_number:
+          type: string
+        cellphone_cc:
           type: string
       xml:
         name: RegisterCellphone
