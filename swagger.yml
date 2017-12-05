@@ -1,11 +1,11 @@
 openapi: 3.0.0
 servers:
-  - url: http://192.168.99.100/v1
+  - url: 'http://192.168.99.101/v1'
     description: Development server
 info:
   description: |
     Flask Base API - Swagger spec for documenting the flask-base API
-  version: "1.0.0"
+  version: 1.0.0
   title: Flask Base API
   termsOfService: 'http://swagger.io/terms/'
   contact:
@@ -58,7 +58,6 @@ paths:
         '200':
           description: user object
       security: []
-
   /auth/register:
     post:
       description: Creates a new user
@@ -91,16 +90,88 @@ paths:
       responses:
         '200':
           description: user object
-
   /auth/logout:
     get:
       description: Logs a user out
       responses:
         '200':
           description: Successfully logged out
-
-
-
+  /auth/password_recovery:
+    post:
+      description: >-
+        creates a password_recovery_hash and sends email to user (assumes
+        login=email)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordRecovery'
+      responses:
+        '200':
+          description: Successfully sent email with password recovery.
+      security: []
+  /auth/password:
+    post:
+      description: >-
+        creates a password_recovery_hash and sends email to user (assumes
+        login=email)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordReset'
+      responses:
+        '200':
+          description: Successfully reseted password.
+      security: []
+  /auth/facebook/login:
+    post:
+      description: >-
+        logs in user using fb_access_token returning the corresponding JWT if
+        user does not exist registers/creates a new one
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacebookLogin'
+      responses:
+        '200':
+          description: Successfully facebook login.
+      security: []
+  /auth/cellphone:
+    post:
+      description: >-
+        generates cellphone_validation_code, idempotent (could be used for
+        resend cellphone_validation_code) allows just 1 user per cellphone
+        validation!
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterCellphone'
+      responses:
+        '200':
+          description: Successfully sent validation code.
+      security: []
+  /auth/cellphone/verify:
+    put:
+      description: >-
+        verifies cellphone_validation_code, idempotent (could be used many
+        times)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyCellphone'
+      responses:
+        '200':
+          description: Successful cellphone validation.
+      security: []
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
@@ -133,6 +204,55 @@ components:
           type: string
       xml:
         name: UserLogin
+    PasswordRecovery:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+      xml:
+        name: PasswordRecovery
+    PasswordReset:
+      type: object
+      required:
+        - token
+        - password
+      properties:
+        token:
+          type: string
+        password:
+          type: string
+      xml:
+        name: PasswordReset
+    FacebookLogin:
+      type: object
+      required:
+        - fb_access_token
+      properties:
+        fb_access_token:
+          type: string
+      xml:
+        name: FacebookLogin
+    RegisterCellphone:
+      type: object
+      required:
+        - cellphone_number
+        - cellphone_cc
+      properties:
+        fb_access_token:
+          type: string
+      xml:
+        name: RegisterCellphone
+    VerifyCellphone:
+      type: object
+      required:
+        - validation_code
+      properties:
+        validation_code:
+          type: string
+      xml:
+        name: VerifyCellphone
     Order:
       type: object
       properties:
@@ -248,9 +368,9 @@ components:
       description: List of user object
       required: true
   securitySchemes:
-    bearerAuth:            # arbitrary name for the security scheme
+    bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+      bearerFormat: JWT
 security:
-  - bearerAuth: []         # use the same name as above
+  - bearerAuth: []
