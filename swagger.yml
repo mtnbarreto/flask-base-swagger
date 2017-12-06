@@ -34,13 +34,27 @@ paths:
         '200':
           description: Will return 'pong!'
       security: []
+
   /users:
+    post:
+      description: adds a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        201:
+          description: email was added
+        400:
+          description: "Sorry. That email or username already exists."
     get:
       description: Returns all users
       responses:
-        '200':
-          description: user object
-      security: []
+        200:
+          description: array user object
+
   '/users/{userId}':
     get:
       description: Returns a user based on a single user ID
@@ -57,7 +71,9 @@ paths:
       responses:
         '200':
           description: user object
-      security: []
+        404:
+          description: "'User does not exist."
+
   /auth/register:
     post:
       description: Creates a new user
@@ -70,6 +86,8 @@ paths:
       responses:
         '200':
           description: user object
+        400:
+          description: "'Sorry. That user already exists."
       security: []
   /auth/login:
     post:
@@ -83,19 +101,21 @@ paths:
       responses:
         '200':
           description: Successfully logged in
+        404:
+          description: "'User does not exist.'"
       security: []
-  /auth/status:
-    get:
-      description: Returns the logged in user's status
-      responses:
-        '200':
-          description: user object
   /auth/logout:
     get:
       description: Logs a user out
       responses:
         '200':
           description: Successfully logged out
+  /auth/status:
+    get:
+      description: Returns the logged in user's status
+      responses:
+        '200':
+          description: user object
   /auth/password_recovery:
     post:
       description: >-
@@ -112,10 +132,9 @@ paths:
           description: Successfully sent email with password recovery.
       security: []
   /auth/password:
-    post:
+    put:
       description: >-
-        creates a password_recovery_hash and sends email to user (assumes
-        login=email)
+        reset user password (assumes login=email)
       requestBody:
         required: true
         content:
@@ -170,11 +189,58 @@ paths:
       responses:
         '200':
           description: Successful cellphone validation.
+  /devices:
+    post:
+      description: >-
+        creates or updates a device on the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+      responses:
+        '200':
+          description: Device successfully registered.
+  /devices/<device_id>:
+    put:
+      description: >-
+        creates/updates and associates the device device_id to the user logged_in_user_id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+      responses:
+        '200':
+          description: Device successfully registered.
+      security: []
+
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
 components:
   schemas:
+    User:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        username:
+          type: "string"
+        firstName:
+          type: "string"
+        lastName:
+          type: "string"
+        email:
+          type: "string"
+        password:
+          type: "string"
+        created_at:
+          type: string
+          format: date-time
     UserRegister:
       type: object
       required:
@@ -253,6 +319,21 @@ components:
           type: string
       xml:
         name: VerifyCellphone
+    Device:
+      type: object
+      required:
+        - device_id
+        - device_type
+        - pn_token
+      properties:
+        device_id:
+          type: string
+        device_type:
+          type: string
+        pn_token:
+          type: string
+      xml:
+        name: Device
     Order:
       type: object
       properties:
