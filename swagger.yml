@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers:
-  - url: 'http://192.168.99.100/v1'
+  - url: 'http://192.168.99.101/v1'
     description: Development server
 info:
   description: |
@@ -14,29 +14,36 @@ info:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
-  - name: pet
-    description: Everything about your Pets
+  - name: sanity
+    description: Sanity checks
+  - name: users
+    description: Operations about user
     externalDocs:
       description: Find out more
       url: 'http://swagger.io'
-  - name: store
-    description: Access to Petstore orders
-  - name: user
-    description: Operations about user
-    externalDocs:
-      description: Find out more about our store
-      url: 'http://swagger.io'
+  - name: auth
+    description: Authentication operations
+  - name: cellphone
+    description: Cellphone operations
+  - name: devices
+    description: Devices operations
+  - name: email
+    description: Email operations
 paths:
   /ping:
     get:
       description: Just a sanity check
+      tags:
+        - users
       responses:
         '200':
-          description: Will return 'pong222!'
+          description: Will return 'pong!'
       security: []
   /users:
     post:
       description: adds a user
+      tags:
+        - users
       requestBody:
         required: true
         content:
@@ -46,16 +53,28 @@ paths:
       responses:
         '201':
           description: email was added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
         '400':
           description: Sorry. That email or username already exists.
     get:
       description: Returns all users
+      tags:
+        - users
       responses:
         '200':
           description: array user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserArray'
   '/users/{userId}':
     get:
       description: Returns a user based on a single user ID
+      tags:
+        - users
       operationId: getUser
       parameters:
         - name: userId
@@ -74,18 +93,31 @@ paths:
           required: true
       responses:
         '200':
-          description: user object
+          description: pet response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
         '404':
-          description: '''User does not exist.'
+          description: 'User does not exist.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
   /auth/register:
     post:
-      description: Creates a new user
+      description: Creates/registers a new user
+      tags:
+        - auth
       parameters:
         - in: header
           name: Accept
+          required: true
+          description: application/json
           schema:
             type: string
-            default: application/json
+          example:
+              'application/json'
       requestBody:
         required: true
         content:
@@ -94,19 +126,32 @@ paths:
               $ref: '#/components/schemas/UserRegister'
       responses:
         '200':
-          description: user object
+          description: Successfully registered.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseAuth'
         '400':
           description: '''Sorry. That user already exists.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
       security: []
   /auth/login:
     post:
       description: Logs a user in
+      tags:
+        - auth
       parameters:
         - in: header
           name: Accept
+          required: true
+          description: application/json
           schema:
             type: string
-            default: application/json
+          example:
+              'application/json'
       requestBody:
         required: true
         content:
@@ -116,26 +161,75 @@ paths:
       responses:
         '200':
           description: Successfully logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseAuth'
         '404':
-          description: '''User does not exist.'''
+          description: 'User does not exist.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
       security: []
   /auth/logout:
     get:
       description: Logs a user out
+      tags:
+        - auth
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          description: application/json
+          schema:
+            type: string
+          example:
+              'application/json'
       responses:
         '200':
           description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
   /auth/status:
     get:
       description: Returns the logged in user's status
+      tags:
+        - auth
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          description: application/json
+          schema:
+            type: string
+          example:
+              'application/json'
       responses:
         '200':
           description: user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
   /auth/password_recovery:
     post:
       description: >-
         creates a password_recovery_hash and sends email to user (assumes
         login=email)
+      tags:
+        - auth
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          description: application/json
+          schema:
+            type: string
+          example:
+              'application/json'
       requestBody:
         required: true
         content:
@@ -145,10 +239,25 @@ paths:
       responses:
         '200':
           description: Successfully sent email with password recovery.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
       security: []
   /auth/password:
     put:
       description: reset user password (assumes login=email)
+      tags:
+        - auth
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          description: application/json
+          schema:
+            type: string
+          example:
+              'application/json'
       requestBody:
         required: true
         content:
@@ -158,12 +267,27 @@ paths:
       responses:
         '200':
           description: Successfully reseted password.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
       security: []
   /auth/facebook/login:
     post:
       description: >-
         logs in user using fb_access_token returning the corresponding JWT if
         user does not exist registers/creates a new one
+      tags:
+        - auth
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          description: application/json
+          schema:
+            type: string
+          example:
+              'application/json'
       requestBody:
         required: true
         content:
@@ -173,39 +297,139 @@ paths:
       responses:
         '200':
           description: Successfully facebook login.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
       security: []
-  /auth/cellphone:
+  /cellphone:
     post:
       description: >-
         generates cellphone_validation_code, idempotent (could be used for
         resend cellphone_validation_code) allows just 1 user per cellphone
         validation!
+      tags:
+        - cellphone
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          description: application/json
+          schema:
+            type: string
+          example:
+              'application/json'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterCellphone'
+              $ref: '#/components/schemas/CellphoneRegister'
       responses:
         '200':
           description: Successfully sent validation code.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /auth/email_verification:
+    put:
+      description: creates a email_token_hash and sends email with token to user (assumes login=email), idempotent (could be use for resend)
+      tags:
+        - auth
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          description: application/json
+          schema:
+            type: string
+          example:
+              'application/json'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordReset'
+      responses:
+        '200':
+          description: Successfully reseted password.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /auth/email_verification/{token}:
+    get:
+      description: sets email verified date
+      tags:
+        - auth
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          description: application/json
+          schema:
+            type: string
+          example:
+              'application/json'
+        - name: token
+          in: path
+          description: email token jwt like
+          required: true
+          schema:
+            type: string
+      operationId: verify_email
+      responses:
+        '200':
+          description: Successfully reseted password.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
   /auth/cellphone/verify:
     put:
       description: >-
         verifies cellphone_validation_code, idempotent (could be used many
         times)
+      tags:
+        - cellphone
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          description: application/json
+          schema:
+            type: string
+          example:
+              'application/json'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VerifyCellphone'
+              $ref: '#/components/schemas/CellphoneVerify'
       responses:
         '200':
           description: Successful cellphone validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
   /devices:
     post:
       description: creates or updates a device on the system
+      tags:
+        - devices
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          description: application/json
+          schema:
+            type: string
+          example:
+              'application/json'
       requestBody:
         required: true
         content:
@@ -215,11 +439,26 @@ paths:
       responses:
         '200':
           description: Device successfully registered.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
   /devices/<device_id>:
     put:
       description: >-
         creates/updates and associates the device device_id to the user
         logged_in_user_id
+      tags:
+        - devices
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          description: application/json
+          schema:
+            type: string
+          example:
+              'application/json'
       requestBody:
         required: true
         content:
@@ -229,6 +468,10 @@ paths:
       responses:
         '200':
           description: Device successfully registered.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
       security: []
 externalDocs:
   description: Find out more about Swagger
@@ -254,6 +497,10 @@ components:
         created_at:
           type: string
           format: date-time
+    UserArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
     UserRegister:
       type: object
       required:
@@ -302,6 +549,15 @@ components:
           type: string
       xml:
         name: PasswordReset
+    Token:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+      xml:
+        name: PasswordReset
     FacebookLogin:
       type: object
       required:
@@ -311,7 +567,7 @@ components:
           type: string
       xml:
         name: FacebookLogin
-    RegisterCellphone:
+    CellphoneRegister:
       type: object
       required:
         - cellphone_number
@@ -322,8 +578,8 @@ components:
         cellphone_cc:
           type: string
       xml:
-        name: RegisterCellphone
-    VerifyCellphone:
+        name: CellphoneRegister
+    CellphoneVerify:
       type: object
       required:
         - validation_code
@@ -331,7 +587,7 @@ components:
         validation_code:
           type: string
       xml:
-        name: VerifyCellphone
+        name: CellphoneVerify
     Device:
       type: object
       required:
@@ -434,13 +690,23 @@ components:
     ApiResponse:
       type: object
       properties:
-        code:
+        status:
           type: integer
           format: int32
-        type:
-          type: string
         message:
           type: string
+      required:
+        - status
+        - message
+    ApiResponseAuth:
+      allOf:     # Combines the BasicErrorModel and the inline model
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            auth_token:
+              type: string
+          required:
+            - auth_token
   requestBodies:
     Pet:
       content:
