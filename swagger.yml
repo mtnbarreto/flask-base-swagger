@@ -32,9 +32,8 @@ paths:
       description: Just a sanity check
       responses:
         '200':
-          description: Will return 'pong!'
+          description: Will return 'pong222!'
       security: []
-
   /users:
     post:
       description: adds a user
@@ -45,16 +44,15 @@ paths:
             schema:
               $ref: '#/components/schemas/UserRegister'
       responses:
-        201:
+        '201':
           description: email was added
-        400:
-          description: "Sorry. That email or username already exists."
+        '400':
+          description: Sorry. That email or username already exists.
     get:
       description: Returns all users
       responses:
-        200:
+        '200':
           description: array user object
-
   '/users/{userId}':
     get:
       description: Returns a user based on a single user ID
@@ -68,15 +66,26 @@ paths:
             type: integer
             format: int64
             minimum: 1
+        - in: header
+          name: Accept
+          schema:
+            type: string
+            default: application/json
+          required: true
       responses:
         '200':
           description: user object
-        404:
-          description: "'User does not exist."
-
+        '404':
+          description: '''User does not exist.'
   /auth/register:
     post:
       description: Creates a new user
+      parameters:
+        - in: header
+          name: Accept
+          schema:
+            type: string
+            default: application/json
       requestBody:
         required: true
         content:
@@ -86,12 +95,18 @@ paths:
       responses:
         '200':
           description: user object
-        400:
-          description: "'Sorry. That user already exists."
+        '400':
+          description: '''Sorry. That user already exists.'
       security: []
   /auth/login:
     post:
       description: Logs a user in
+      parameters:
+        - in: header
+          name: Accept
+          schema:
+            type: string
+            default: application/json
       requestBody:
         required: true
         content:
@@ -101,8 +116,8 @@ paths:
       responses:
         '200':
           description: Successfully logged in
-        404:
-          description: "'User does not exist.'"
+        '404':
+          description: '''User does not exist.'''
       security: []
   /auth/logout:
     get:
@@ -133,8 +148,7 @@ paths:
       security: []
   /auth/password:
     put:
-      description: >-
-        reset user password (assumes login=email)
+      description: reset user password (assumes login=email)
       requestBody:
         required: true
         content:
@@ -191,8 +205,7 @@ paths:
           description: Successful cellphone validation.
   /devices:
     post:
-      description: >-
-        creates or updates a device on the system
+      description: creates or updates a device on the system
       requestBody:
         required: true
         content:
@@ -205,7 +218,8 @@ paths:
   /devices/<device_id>:
     put:
       description: >-
-        creates/updates and associates the device device_id to the user logged_in_user_id
+        creates/updates and associates the device device_id to the user
+        logged_in_user_id
       requestBody:
         required: true
         content:
@@ -216,28 +230,27 @@ paths:
         '200':
           description: Device successfully registered.
       security: []
-
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
 components:
   schemas:
     User:
-      type: "object"
+      type: object
       properties:
         id:
-          type: "integer"
-          format: "int64"
+          type: integer
+          format: int64
         username:
-          type: "string"
+          type: string
         firstName:
-          type: "string"
+          type: string
         lastName:
-          type: "string"
+          type: string
         email:
-          type: "string"
+          type: string
         password:
-          type: "string"
+          type: string
         created_at:
           type: string
           format: date-time
