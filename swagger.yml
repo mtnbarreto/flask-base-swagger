@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers:
-  - url: 'http://192.168.99.101/v1'
+  - url: http://192.168.99.100/v1
     description: Development server
 info:
   description: |
@@ -34,7 +34,7 @@ paths:
     get:
       description: Just a sanity check
       tags:
-        - users
+        - sanity
       responses:
         '200':
           description: Will return 'pong!'
@@ -332,11 +332,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
-  /auth/email_verification:
+  /email_verification:
     put:
       description: creates a email_token_hash and sends email with token to user (assumes login=email), idempotent (could be use for resend)
       tags:
-        - auth
+        - email
       parameters:
         - in: header
           name: Accept
@@ -359,11 +359,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
-  /auth/email_verification/{token}:
+  /email_verification/{token}:
     get:
       description: sets email verified date
       tags:
-        - auth
+        - email
       parameters:
         - in: header
           name: Accept
@@ -387,7 +387,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
-  /auth/cellphone/verify:
+  /cellphone/verify:
     put:
       description: >-
         verifies cellphone_validation_code, idempotent (could be used many
