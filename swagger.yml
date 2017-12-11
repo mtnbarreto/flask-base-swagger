@@ -44,6 +44,8 @@ paths:
       description: adds a user
       tags:
         - users
+      parameters:
+        - $ref: '#/components/parameters/acceptHeaderParam'
       requestBody:
         required: true
         content:
@@ -63,6 +65,8 @@ paths:
       description: Returns all users
       tags:
         - users
+      parameters:
+        - $ref: '#/components/parameters/acceptHeaderParam'
       responses:
         '200':
           description: array user object
@@ -77,6 +81,7 @@ paths:
         - users
       operationId: getUser
       parameters:
+        - $ref: '#/components/parameters/acceptHeaderParam'
         - name: userId
           in: path
           description: ID of user to fetch
@@ -85,12 +90,6 @@ paths:
             type: integer
             format: int64
             minimum: 1
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/json
-          required: true
       responses:
         '200':
           description: pet response
@@ -110,14 +109,7 @@ paths:
       tags:
         - auth
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       requestBody:
         required: true
         content:
@@ -144,14 +136,7 @@ paths:
       tags:
         - auth
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       requestBody:
         required: true
         content:
@@ -178,14 +163,7 @@ paths:
       tags:
         - auth
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       responses:
         '200':
           description: Successfully logged out
@@ -199,14 +177,7 @@ paths:
       tags:
         - auth
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       responses:
         '200':
           description: user object
@@ -222,14 +193,7 @@ paths:
       tags:
         - auth
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       requestBody:
         required: true
         content:
@@ -250,14 +214,7 @@ paths:
       tags:
         - auth
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       requestBody:
         required: true
         content:
@@ -280,14 +237,7 @@ paths:
       tags:
         - auth
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       requestBody:
         required: true
         content:
@@ -311,14 +261,7 @@ paths:
       tags:
         - cellphone
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       requestBody:
         required: true
         content:
@@ -338,14 +281,7 @@ paths:
       tags:
         - email
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       requestBody:
         required: true
         content:
@@ -365,14 +301,6 @@ paths:
       tags:
         - email
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
         - name: token
           in: path
           description: email token jwt like
@@ -395,14 +323,7 @@ paths:
       tags:
         - cellphone
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       requestBody:
         required: true
         content:
@@ -422,14 +343,7 @@ paths:
       tags:
         - devices
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       requestBody:
         required: true
         content:
@@ -451,14 +365,7 @@ paths:
       tags:
         - devices
       parameters:
-        - in: header
-          name: Accept
-          required: true
-          description: application/json
-          schema:
-            type: string
-          example:
-              'application/json'
+        - $ref: '#/components/parameters/acceptHeaderParam'
       requestBody:
         required: true
         content:
@@ -477,6 +384,15 @@ externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
 components:
+  parameters:
+    acceptHeaderParam:
+      in: header
+      name: Accept
+      required: true
+      schema:
+        type: string
+        default: application/json
+      description: Accept HTTP header default value (application/json)
   schemas:
     User:
       type: object
