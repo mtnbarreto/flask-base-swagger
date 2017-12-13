@@ -671,13 +671,6 @@ components:
         - code
         - message
   requestBodies:
-    Pet:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Pet object that needs to be added to the store
-      required: true
     UserArray:
       content:
         application/json:
