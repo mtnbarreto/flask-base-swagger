@@ -4,9 +4,9 @@ servers:
     description: Development server
 info:
   description: |
-    Flask Base API - Swagger spec for documenting the flask-base API
+    Base API - Swagger spec for documenting the base backed API
   version: 1.0.0
-  title: Flask Base API
+  title: Base Backend API
   termsOfService: 'http://swagger.io/terms/'
   contact:
     email: mtn.barreto@gmail.com
