@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers:
-  - url: http://192.168.99.100/v1
+  - url: http://0.0.0.0:5001/v1
     description: Development server
 info:
   description: |
@@ -9,7 +9,7 @@ info:
   title: Base Backend API
   termsOfService: 'http://swagger.io/terms/'
   contact:
-    email: mtn.barreto@gmail.com
+    email: username@gmail.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
