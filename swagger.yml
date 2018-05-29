@@ -305,7 +305,7 @@ paths:
   /auth/facebook/set_standalone_user:
     put:
       description: >-
-        sets username and password to work directly on the system wihtout facebook
+        sets username and password to work directly on the system without facebook
       tags:
         - auth
       parameters:
@@ -392,7 +392,7 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
         'default':
           $ref: '#/components/responses/ServerError'
-  /email_verification/{token}:
+  /email_verification/<token>:
     get:
       description: sets email verified date
       tags:
